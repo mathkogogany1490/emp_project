@@ -1,10 +1,14 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {
-    fetchGetEmployeeInfos,
-    fetchPutEmployeeInfo
-} from "@/redux/empApi";
 import {Employee} from "@/types/type";
 
+
+
+const initialData: Employee[] = [
+    {id: "1", name: 'John', age: 35, job: "frontend", language: "react", pay: 1},
+    {id: "2", name: 'Peter', age: 35, job: "backend", language: "python", pay: 1},
+    {id: "3", name: 'Sue', age: 35, job: "frontend", language: "javascript", pay: 1},
+    {id: "4", name: 'Susan', age: 35, job: "backend", language: "java", pay: 1},
+]
 
 export const tempEmp: Employee = {
     id:"", name:"", age: 0, job:"", language: "", pay:0
@@ -37,7 +41,7 @@ const initialState: EmpState = {
     mode: "",
     selectedId: "",
     upInfo: tempEmp,
-    infos: [],
+    infos: initialData,
     error: null,
     loading: false,
 }
@@ -62,47 +66,28 @@ const empSlice = createSlice({
                 state.upInfo = state.infos.filter(info=>info.id==state.selectedId)[0];
             }
             state.mode = action.payload;
-        }
-    },
-    extraReducers: (builder) => {
-        builder
-            .addCase(fetchGetEmployeeInfos.pending, (state) => {
-                state.loading = true;
-                state.error = null;
-            })
-            .addCase(fetchGetEmployeeInfos.fulfilled, (state, action) => {
-                state.loading = false;
-                console.log("infos", action.payload)
-                state.infos = action.payload;
-            })
-            .addCase(fetchGetEmployeeInfos.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.payload ?? "로드 실패"
-            })
-            .addCase(fetchPutEmployeeInfo.pending, (state) => {
-                state.loading = true;
-                state.error = null;
-            })
-            .addCase(fetchPutEmployeeInfo.fulfilled, (state, action) => {
-                state.loading = false;
-                console.log("?????", action.payload)
-                state.infos = state.infos.map(info =>
-                    (
-                        info.id === state.selectedId ?
-                            {...action.payload, id: String(info.id)}
-                            : info
-                    )
+        },
+        registerEmp(state: EmpState, action: PayloadAction<Employee>){
+            const nextId = state.infos.length ?
+                Math.max(...state.infos.map(info=>Number(info.id))) + 1
+                : 1
+            state.infos = [
+                ...state.infos,
+                { ...action.payload, id: String(nextId)}
+            ]
+        },
+        updateEmp(state: EmpState, action: PayloadAction<Employee>){
+            state.infos = state.infos.map(info =>
+                (
+                    info.id === state.selectedId ?
+                        {...action.payload, id: String(info.id)}
+                        : info
                 )
-                state.upInfo = action.payload;
-            })
-            .addCase(fetchPutEmployeeInfo.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.payload ?? "로드 실패"
-            })
-
+            )
+        },
     }
 
 })
 
-export const {selectId, changeMode} = empSlice.actions;
+export const {selectId, changeMode, registerEmp, updateEmp} = empSlice.actions;
 export default empSlice.reducer;

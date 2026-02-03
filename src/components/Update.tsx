@@ -4,7 +4,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {RootDispatch, RootState} from "@/redux/store";
 import {Form, Input, Label} from "@/components/Register";
 import {tempEmp} from "@/redux/empSlice";
-import {fetchGetEmployeeInfos, fetchPutEmployeeInfo} from "@/redux/empApi";
+import {updateEmp} from "@/redux/empSlice";
 
 
 const Update = () => {
@@ -23,7 +23,7 @@ const Update = () => {
     }
     const handleSubmit = (e:FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        dispatch(fetchPutEmployeeInfo(empInfo));
+        dispatch(updateEmp(empInfo));
         setEmpInfo(tempEmp);
 
     }
