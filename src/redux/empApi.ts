@@ -11,7 +11,7 @@ export const fetchGetEmployeeInfos =
     "fetchGetEmployeeInfos",
         async (_, thunkAPI) =>{
             try{
-                const response = await axios.get(`${API_URL}/app/emp`);
+                const response = await axios.get(`${API_URL}/emp`);
                 console.log("response", response.data);
                 return response.data;
             }catch{
@@ -26,7 +26,7 @@ export const fetchPostEmployeeInfo =
         "fetchPostEmployeeInfo",
         async (empInfo, thunkAPI) =>{
             try{
-                const response = await axios.post(`${API_URL}/app/emp`, empInfo);
+                const response = await axios.post(`${API_URL}/emp`, empInfo);
                 return response.data;
             }catch{
                 return thunkAPI.rejectWithValue("데이터 로드 실패");
@@ -40,7 +40,7 @@ export const fetchPutEmployeeInfo =
         "fetchPutEmployeeInfo",
         async (empInfo, thunkAPI) =>{
             try{
-                const response = await axios.put(`${API_URL}/app/emp/${empInfo.id}`, empInfo);
+                const response = await axios.put(`${API_URL}/emp/${empInfo.id}`, empInfo);
                 return response.data;
             }catch{
                 return thunkAPI.rejectWithValue("데이터 로드 실패");
